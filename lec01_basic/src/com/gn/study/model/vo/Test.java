@@ -42,7 +42,7 @@ public class Test {
 
 	@Override
 	public String toString() {
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy년MM월dd일 HH시mm분ss초");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String date = dtf.format(testDate);
 		return "번호:"+testNo+",이름:"+testName+",등록일:"+date;
 	}

@@ -49,6 +49,7 @@ public class Select_One_Scanner {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
+			sc.close();
 			try {
 				rs.close();
 				stmt.close();

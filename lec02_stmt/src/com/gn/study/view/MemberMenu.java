@@ -32,6 +32,7 @@ public class MemberMenu {
 			switch(menu) {
 				case 1 : createMember(); break;
 				case 2 : selectMemberAll(); break;
+				
 				case 0 : System.out.println("잘가 앙녕~"); return;
 				default : System.out.println("번호가 잘못됐는뎅..."); break;
 			
@@ -44,7 +45,15 @@ public class MemberMenu {
 		System.out.println("=== 회원 전체 조회 ===");
 		List<Member> list = mc.selectMemberAll();
 		// (1) 만약에 list가 비어있다면 -> 조회된 결과가 없습니다.
+		if(list.isEmpty()) {
+			System.out.println("조회된 결과가 없습니다.");
+		}else {
+			for(Member m : list) {
+				System.out.println(m);
+			}
+		}
 		// (2) 그렇지 않다면 Member 목록 출력.
+		
 	}
 	// 회원 추가 화면
 	public void createMember() {
@@ -71,7 +80,11 @@ public class MemberMenu {
 		
 	}
 	
-	
+	// 회원 아이디 검색
+	public void searchMemberId() {
+		System.out.println("=== 회원 아이디 검색 ===");
+//		mc.searchMemberId();
+	}
 	
 	
 }

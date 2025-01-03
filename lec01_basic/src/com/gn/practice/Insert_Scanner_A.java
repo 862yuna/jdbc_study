@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import com.gn.study.model.vo.Test;
@@ -24,20 +26,22 @@ public class Insert_Scanner_A {
 			stmt = conn.createStatement();
 			System.out.print("이름 : ");
 			String str = sc.nextLine();
-			String sql = "insert into test(t_name) values('"+str+"')";
-			int result = stmt.executeUpdate(sql);
+			String sql1 = "INSERT INTO test(t_name) VALUES('"+str+"')";
+			int result = stmt.executeUpdate(sql1);
 			if(result > 0) {
 //				System.out.println("성공!!");
-				String sql1 = "select * from test where t_name = '"+str+"'";
-				rs = stmt.executeQuery(sql1);
-				Test t = new Test();
-				while(rs.next()) {
-					t.setTestNo(rs.getInt("t_no"));
-					t.setTestName(rs.getString("t_name"));
-					t.setTestDate(rs.getTimestamp("t_date").toLocalDateTime());
-				}
 				System.out.println("===== test =====");
-				System.out.println(t);
+				List<Test> list = new ArrayList<Test>();
+				String sql2 = "SELECT * FROM test WHERE t_name = '"+str+"'";
+				rs = stmt.executeQuery(sql2);
+				while(rs.next()) {
+					Test t = new Test(rs.getInt("t_no")
+							,rs.getString("t_name")
+							,rs.getTimestamp("t_date").toLocalDateTime());
+					list.add(t);
+				}
+				System.out.println(list);
+				
 			} else {
 				System.out.println("실패!!");
 			}

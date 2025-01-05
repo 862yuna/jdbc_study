@@ -24,4 +24,26 @@ public class MemberController {
 //		}
 		return result;
 	}
+	
+	public List<Member> searchMemberId(String myId) {
+		List<Member> list = new MemberDao().searchMemberId(myId);
+		return list;
+		
+	}
+	
+	public List<Member> searchName(String name){
+		List<Member> list = new MemberDao().searchName(name);
+		return list;
+	}
+	
+	public int checkMember(String memId,String memPw) {
+		int result = new MemberDao().checkMember(memId,memPw);
+		System.out.println("나는 Controller" + result);
+		return result;
+	}
+	
+	public int editPw(String pass, String myId) {
+		int result = new MemberDao().editPw(pass, myId);
+		return result;
+	}
 }

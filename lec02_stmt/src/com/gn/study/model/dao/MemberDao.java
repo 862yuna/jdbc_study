@@ -90,12 +90,11 @@ public class MemberDao {
 		
 	}
 	
-	public void searchMemberId() {
-		Scanner sc = new Scanner(System.in);
+	public List<Member> searchMemberId(String myId) {
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
-		
+		List<Member> list = new ArrayList<Member>();
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
 			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
@@ -103,11 +102,10 @@ public class MemberDao {
 			String pw = "tiger";
 			conn = DriverManager.getConnection(url,id,pw);
 			stmt = conn.createStatement();
-			String str = sc.nextLine();
-			String sql = "SELECT * FROM WHERE m_id = '"+str+"'";
+			String sql = "SELECT * FROM member WHERE m_id = '"+myId+"'";
 			rs = stmt.executeQuery(sql);
-			Member m = new Member();
 			if(rs.next()) {
+				Member m = new Member();
 				m.setMemberNo(rs.getInt("m_no"));
 				m.setMemberId(rs.getString("m_id"));
 				m.setMemberPw(rs.getString("m_pw"));
@@ -117,6 +115,7 @@ public class MemberDao {
 				m.setMemberGender(rs.getString("m_gender"));
 				m.setRegDate(rs.getTimestamp("reg_date").toLocalDateTime());
 				m.setModDate(rs.getTimestamp("mod_date").toLocalDateTime());
+				list.add(m);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -129,9 +128,116 @@ public class MemberDao {
 				e.printStackTrace();
 			}
 		}
+		return list;
 	}
 	
+	public List<Member> searchName(String name){
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		List<Member> list = new ArrayList<Member>();
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url,id,pw);
+			stmt = conn.createStatement();
+			String sql = "SELECT * FROM member "
+					+ "WHERE m_name LIKE '%"+name+"%'";
+			rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				Member m = new Member();
+				m.setMemberNo(rs.getInt("m_no"));
+				m.setMemberId(rs.getString("m_id"));
+				m.setMemberPw(rs.getString("m_pw"));
+				m.setMemberName(rs.getString("m_name"));
+				m.setMemberEmail(rs.getString("m_email"));
+				m.setMemberPhone(rs.getString("m_phone"));
+				m.setMemberGender(rs.getString("m_gender"));
+				m.setRegDate(rs.getTimestamp("reg_date").toLocalDateTime());
+				m.setModDate(rs.getTimestamp("mod_date").toLocalDateTime());
+				list.add(m);
+			}
+			
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				rs.close();
+				stmt.close();
+				conn.close();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+		
+	}
 	
+	public int checkMember(String memId,String memPw) {
+		int result = 0;
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url,id,pw);
+			stmt = conn.createStatement();
+			String sql = "select * from member where m_id = '"
+                    + memId + "' and m_pw = '" + memPw + "'";
+			rs = stmt.executeQuery(sql);
+			if(rs.next()) {
+				result = 1;
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				rs.close();
+				stmt.close();
+				conn.close();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("나는 Dao" + result);
+		return result;
+	}
 	
+	public int editPw(String pass, String myId) {
+		Connection conn = null;
+		Statement stmt = null;
+		int result = 0;
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url,id,pw);
+			stmt = conn.createStatement();
+			String sql = "UPDATE member"
+					+ " SET m_pw = '"+pass+"'"
+					+ " WHERE m_id = '"+myId+"'";
+					
+			result = stmt.executeUpdate(sql);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				stmt.close();
+				conn.close();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
 	
 }

@@ -25,10 +25,10 @@ public class MemberController {
 		return result;
 	}
 	
-	public List<Member> searchMemberId(String myId) {
-		List<Member> list = new MemberDao().searchMemberId(myId);
-		return list;
-		
+	public Member selectMemberId(String myId) {
+//		Member m = new MemberDao().selectMemberId(myId);
+//		return m;
+		return new MemberDao().selectMemberId(myId);
 	}
 	
 	public List<Member> searchName(String name){
@@ -36,14 +36,18 @@ public class MemberController {
 		return list;
 	}
 	
-	public int checkMember(String memId,String memPw) {
-		int result = new MemberDao().checkMember(memId,memPw);
-		System.out.println("나는 Controller" + result);
+	public Member selectMemberOneByIdAndPw(String memId,String memPw) {
+		return new MemberDao().selectMemberOneByIdAndPw(memId,memPw);
+		
+	}
+	
+	public int updateMemberInfo(String myId,String name, String phone,String email) {
+		int result = new MemberDao().updateMemberInfo(myId,name,phone,email);
 		return result;
 	}
 	
-	public int editPw(String pass, String myId) {
-		int result = new MemberDao().editPw(pass, myId);
+	public int deleteMember(String id,String pw) {
+		int result = new MemberDao().deleteMember(id,pw);
 		return result;
 	}
 }

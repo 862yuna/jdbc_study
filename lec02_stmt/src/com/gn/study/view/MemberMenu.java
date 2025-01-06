@@ -31,9 +31,10 @@ public class MemberMenu {
 			switch(menu) {
 				case 1 : createMember(); break;
 				case 2 : selectMemberAll(); break;
-				case 3 : searchMemberId(); break;
+				case 3 : selectMemberId(); break;
 				case 4 : searchName(); break;
-				case 5 : editMember(); break;
+				case 5 : updateMember(); break;
+				case 6 : deleteMember(); break;
 				case 0 : System.out.println("잘가 앙녕~"); return;
 				default : System.out.println("번호가 잘못됐는뎅..."); break;
 			
@@ -81,25 +82,25 @@ public class MemberMenu {
 		
 	}
 	
-	// 회원 아이디 검색
-	public void searchMemberId() {
+	// 아이디 기준 회원 조회
+	public void selectMemberId() {
 		System.out.println("=== 회원 아이디 검색 ===");
 		System.out.print("아이디를 입력하세요 : ");
+		sc.nextLine();
 		String myId = sc.nextLine();
-		
-		List<Member> list = mc.searchMemberId(myId);
-		if(list.isEmpty()) {
-			System.out.println("조회된 결과가 없습니다.");
+		// WHERE -> = (UNIQUE / X) / LIKE
+		Member m = mc.selectMemberId(myId);
+		if(m != null) {
+			System.out.println(m);
 		}else {
-			for(Member m : list) {
-				System.out.println(m);
-			}
+			System.out.println(myId+"는 존재하지 않는 정보입니다.");
 		}
 		
 		
 	}
 	
 	public void searchName() {
+		sc.nextLine();
 		System.out.println("=== 회원 이름 키워드 검색 ===");
 		System.out.print("단어를 입력하세요 : ");
 		String name = sc.nextLine();
@@ -115,65 +116,88 @@ public class MemberMenu {
 		
 	}
 	
-	public void editMember() {
+	public void updateMember() {
+		// 관리자 -> 모든 회원 정보 수정
+		// 사용자 -> 내것만 수정
+		sc.nextLine();
+		System.out.println("=== 본인 인증이 필요합니다 ===");
 		System.out.print("아이디를 입력해주세요 : ");
 		String memId = sc.nextLine();
-		sc.nextLine();
 		System.out.print("비밀번호를 입력해주세요 :");
-		String memPw = sc.nextLine();
-		int result = mc.checkMember(memId,memPw);
-		if(result > 0) {
-			while(true) {
-				System.out.println("=== 회원 정보 수정 ===");
-				System.out.println("1. 비밀번호 변경");
-				System.out.println("2. 이름 변경");
-				System.out.println("3. 이메일 변경");
-				System.out.println("4. 전화번호 변경");
-				System.out.println("0. 종료 ");
-				
-				System.out.print("메뉴 : ");
-				
-				int menu = sc.nextInt();
-				sc.nextLine();
-				
-				switch(menu) {
-				case 1 : editPw(); break;
-				case 2 : editName(); break;
-				case 3 : editEmail(); break;
-				case 4 : editPhone(); break;
-				case 0 : System.out.println("수정을 종료합니다."); return;
-				default : System.out.println("잘못된 번호입니다.");
-				}
+		String memPw = sc.next();
+		Member m = mc.selectMemberOneByIdAndPw(memId,memPw);
+		if(m != null) {
+			System.out.println(m);
+
+			// 이메일, 전화번호, 이름 -> 수정
+			System.out.print("이름 : ");
+			String name = sc.next();
+			System.out.print("전화번호 : ");
+			String phone = sc.next();
+			System.out.print("이메일 : ");
+			String email = sc.next();
+			int result = mc.updateMemberInfo(memId,name,phone,email);
+			if(result >0) {
+				System.out.println("수정 성공!");
+			}else {
+				System.out.println("수정 실패");
 			}
-			
 		}else {
-			System.out.println("아이디와 비밀번호를 다시 확인해주세요.");
+			System.out.println("잘못된 아이디 혹은 비밀번호 입니다.");
 		}
+		
+//		int result = mc.checkMember(memId,memPw);
+//		if(result > 0) {
+//			while(true) {
+//				System.out.println("=== 회원 정보 수정 ===");
+//				System.out.println("1. 비밀번호 변경");
+//				System.out.println("2. 이름 변경");
+//				System.out.println("3. 이메일 변경");
+//				System.out.println("4. 전화번호 변경");
+//				System.out.println("0. 종료 ");
+//				
+//				System.out.print("메뉴 : ");
+//				
+//				int menu = sc.nextInt();
+//				sc.nextLine();
+//				
+//				switch(menu) {
+//				case 1 : editPw(); break;
+//				case 2 : editName(); break;
+//				case 3 : editEmail(); break;
+//				case 4 : editPhone(); break;
+//				case 0 : System.out.println("수정을 종료합니다."); return;
+//				default : System.out.println("잘못된 번호입니다.");
+//				}
+//			}
+//			
+//		}else {
+//			System.out.println("아이디와 비밀번호를 다시 확인해주세요.");
+//		}
 		
 	}
 	
-	public void editPw() {
-		System.out.print("고객님의 아이디를 입력하세요 : ");
-		String myId = sc.nextLine();
+	public void deleteMember() {
 		sc.nextLine();
-		System.out.print("변경할 비밀번호를 입력해주세요 : ");
-		String pass = sc.nextLine();
-		int result = mc.editPw(pass,myId);
-		if(result > 0) {
-			System.out.println("비밀번호가 변경되었습니다.");
+		System.out.println("=== 본인 인증이 필요합니다 ===");
+		System.out.print("아이디를 입력해주세요 : ");
+		String memId = sc.nextLine();
+		System.out.print("비밀번호를 입력해주세요 :");
+		String memPw = sc.next();
+		Member m = mc.selectMemberOneByIdAndPw(memId,memPw);
+		if(m != null) {
+			System.out.println(m);
+
+			int result = mc.deleteMember(memId,memPw);
+			if(result >0) {
+				System.out.println("탈퇴 완료되었습니다.");
+			}else {
+				System.out.println("탈퇴에 실패하였습니다.");
+			}
 		}else {
-			System.out.println("비밀번호 변경에 실패하였습니다.");
+			System.out.println("잘못된 아이디 혹은 비밀번호 입니다.");
 		}
 		
-	}
-	
-	public void editName() {
-		
-	}
-	public void editEmail() {
-		
-	}
-	public void editPhone() {
 		
 	}
 	

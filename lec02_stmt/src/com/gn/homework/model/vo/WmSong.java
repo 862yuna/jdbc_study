@@ -1,4 +1,4 @@
-package com.gn.homework.vo;
+package com.gn.homework.model.vo;
 
 public class WmSong {
 	private int mNo;
@@ -7,7 +7,11 @@ public class WmSong {
 	private int mPlay;
 	
 	public WmSong() {}
-
+	public WmSong(String mTitle,String mArtist) {
+		this.mTitle = mTitle;
+		this.mArtist = mArtist;
+	}
+	
 	public WmSong(int mNo, String mTitle, String mArtist, int mPlay) {
 		super();
 		this.mNo = mNo;

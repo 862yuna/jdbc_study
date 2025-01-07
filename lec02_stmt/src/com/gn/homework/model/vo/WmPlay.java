@@ -1,4 +1,4 @@
-package com.gn.homework.vo;
+package com.gn.homework.model.vo;
 
 public class WmPlay {
 	private int pNo;

@@ -1,4 +1,4 @@
-package com.gn.homework.vo;
+package com.gn.homework.model.vo;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +10,15 @@ public class WmUser {
 	private LocalDateTime regDate;
 	
 	public WmUser() {}
+	public WmUser(String userId, String userPw) {
+		this.userId = userId;
+		this.userPw = userPw;
+	}
+	public WmUser(String userId,String userPw,String userName) {
+		this.userId = userId;
+		this.userPw = userPw;
+		this.userName = userName;
+	}
 	public WmUser(int userNo, String userId, String userPw, String userName, LocalDateTime regDate) {
 		this.userNo = userNo;
 		this.userId = userId;

@@ -11,6 +11,127 @@ import java.util.List;
 
 import com.gn.study.model.vo.Car;
 public class Dao {
+	
+	public int editCarDate(Connection conn,int carNo,String carDate) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		try {
+			String sql = "UPDATE car SET car_date = ? "
+					+ "WHERE car_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, carDate);
+			pstmt.setInt(2, carNo);
+			result = pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	public int editCarPrice(Connection conn,int carNo,int carPrice) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		try {
+			String sql = "UPDATE car SET car_price = ? "
+					+ "WHERE car_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, carPrice);
+			pstmt.setInt(2, carNo);
+			result = pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	public int editCarName(Connection conn,int carNo,String modelName) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		try {
+			String sql = "UPDATE car SET car_model = ? "
+					+ "WHERE car_no = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, modelName);
+			pstmt.setInt(2, carNo);
+			result = pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	public int deleteCarOne(Connection conn, int carNo) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		try {
+			String sql = "DELETE FROM car WHERE car_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, carNo);
+			result = pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	public List<Car> searchCarList(Connection conn, int option, Object obj){
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<Car> list = new ArrayList<Car>();
+		try {
+			String sql = "select * from car where ?";
+			switch(option) {
+				case 1:
+					sql = sql + "car_no = ?";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setInt(1, (Integer)obj);
+					rs = pstmt.executeQuery();
+				case 2: 
+					sql = sql + "car_model = ?";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, (String)obj);
+					rs = pstmt.executeQuery();
+				case 3: 
+					sql = sql + "car_price = ?";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setInt(1, (Integer)obj);
+					rs = pstmt.executeQuery();
+				case 4: 
+					sql = sql + "car_date = ?";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, (String)obj);
+					rs = pstmt.executeQuery();
+			}
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			while(rs.next()) {
+				Car car = new Car();
+				car.setCarNo(rs.getInt("car_no"));
+				car.setCarModel(rs.getString("car_model"));
+				car.setCarPrice(rs.getInt("car_price"));
+				if(rs.getDate("car_date") != null) {
+					car.setCarDate(sdf.format(rs.getDate("car_date")));
+				} else {
+					car.setCarDate("null");
+				}
+				list.add(car);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		return list;
+	}
+	
 	public Car selectCarByModel(String modelName,Connection conn) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;

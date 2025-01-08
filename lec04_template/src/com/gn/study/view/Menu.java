@@ -1,5 +1,6 @@
 package com.gn.study.view;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,19 +28,100 @@ public class Menu {
 			switch(menu) {
 				case 1 : insertCarOne(); break;
 				case 2 : selectCarAll(); break;
-				case 3 : selectCarByModel(); break;
-				case 4 : break;
-				case 5 : break;
+				case 3 : selectCarOne(); break;
+				case 4 : editCarOne(); break;
+				case 5 : deleteCarOne(); break;
 			}
 		}
 	}
+	public void editCarOne() {
+		System.out.println("*** 수정 ***");
+		List<Car> list = controller.selectCarAll();
+		printList(list);
+		System.out.println("어떤 모델의 정보를 수정하시겠습니까?");
+		System.out.print("번호 : ");
+		int option = sc.nextInt();
+		int result = 0;
+		System.out.print("모델명을 수정하시겠습니까?(Y/N) : ");
+		String answer = sc.next();
+		if(("Y").equals(answer)) {
+			System.out.print("모델명 : ");
+			String carName = sc.next();
+			result = controller.editCarName(option,carName);
+		}
+		
+		System.out.print("가격을 수정하시겠습니까?(Y/N) : ");
+		answer = sc.next();
+		if(("Y").equals(answer)) {
+			System.out.print("가격 : ");
+			int carPrice = sc.nextInt();
+			result = controller.editCarPrice(option,carPrice);
+		}
+		
+		System.out.print("출시일을 수정하시겠습니까?(Y/N) : ");
+		answer = sc.next();
+		if(("Y").equals(answer)) {
+			System.out.print("출시일 : ");
+			String carDate = sc.next();
+			result = controller.editCarDate(option,carDate);
+		}
+		
+		
+//		List<Car> list2 = new ArrayList<Car>();
+//		Object obj = new Object();
+//		list = controller.searchCarList(option,obj);
+//	System.out.print("모델명 : ");
+//	String modelName = sc.nextLine();
+//	Car car = controller.selectCarByModel(modelName);
+//	selectPrint(car);
+		dmlResultPrint(result,"수정");
+		
+	}
+	
+	public void deleteCarOne() {
+		System.out.println("*** 삭제 ***");
+		List<Car> list = controller.selectCarAll();
+		printList(list);
+		System.out.println("삭제하고자 하는 자동차 번호를 입력하세요.");
+		System.out.print("번호 : ");
+		int carNo = sc.nextInt();
+		int result = controller.deleteCarOne(carNo);
+		dmlResultPrint(result,"삭제");
+	}
+	
 	public void selectPrint(Car car) {
 		if(car != null) System.out.println(car);
 		else System.out.println("존재하지 않는 정보입니다.");
 	}
 	
-	public void selectCarByModel() {
+	public void selectCarOne() {
 		System.out.println("*** 단일 조회 ***");
+		System.out.println("검색 기준으로 삼고 싶은 항목을 선택하세요.");
+		System.out.println("1. 번호 / 2. 모델변 / 3. 가격 / 4. 출시일");
+		System.out.print("선택 : ");
+		int option = sc.nextInt();
+		
+		List<Car> list = new ArrayList<Car>();
+		Object obj = new Object();
+		
+		switch(option) {
+			case 1 : // 번호
+				System.out.print("번호 : ");
+				obj = sc.nextInt(); break;
+			case 2 : // 모델명
+				sc.nextLine();
+				System.out.print("모델명 : ");
+				obj = sc.nextLine(); break;
+			case 3: // 가격
+				System.out.print("가격 : ");
+				obj = sc.nextInt(); break;
+			case 4 : // 출시일
+				System.out.print("출시일 : ");
+				obj = sc.nextLine(); break;
+		}
+		list = controller.searchCarList(option,obj);
+		
+		
 		System.out.print("모델명 : ");
 		String modelName = sc.nextLine();
 		Car car = controller.selectCarByModel(modelName);

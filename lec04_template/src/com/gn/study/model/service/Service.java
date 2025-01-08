@@ -12,6 +12,41 @@ import com.gn.study.model.vo.Car;
 public class Service {
 	private Dao dao = new Dao();
 	
+	public int editCarDate(int carNo,String carDate) {
+		Connection conn = getConnection();
+		int result = dao.editCarDate(conn,carNo,carDate);
+		close(conn);
+		return result;
+	}
+	
+	public int editCarPrice(int carNo,int carPrice) {
+		Connection conn = getConnection();
+		int result = dao.editCarPrice(conn,carNo,carPrice);
+		close(conn);
+		return result;
+	}
+	
+	public int editCarName(int carNo,String modelName) {
+		Connection conn = getConnection();
+		int result = dao.editCarName(conn,carNo,modelName);
+		close(conn);
+		return result;
+	}
+	
+	public int deleteCarOne(int carNo) {
+		Connection conn = getConnection();
+		int result = dao.deleteCarOne(conn,carNo);
+		close(conn);
+		return result;
+	}
+	
+	public List<Car> searchCarList(int option,Object obj){
+		Connection conn = getConnection();
+		List<Car> list = dao.searchCarList(conn,option,obj);
+		close(conn);
+		return list;
+	}
+	
 	public Car selectCarByModel(String modelName) {
 		Connection conn = getConnection();
 		Car car = dao.selectCarByModel(modelName,conn);

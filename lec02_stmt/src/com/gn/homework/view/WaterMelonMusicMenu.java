@@ -195,7 +195,7 @@ public class WaterMelonMusicMenu {
 			System.out.println("음악 재생에 실패하였습니다.");
 		}
 	}
-	
+	// 개인 정보 수정
 	public void editUser() {
 		System.out.println("=== 개인 정보 수정 ===");
 		System.out.print("아이디 : ");

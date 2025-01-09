@@ -7,5 +7,4 @@ public class Run {
 		WaterMelonMusicMenu wm = new WaterMelonMusicMenu();
 		wm.mainMenu();
 	}
-
 }

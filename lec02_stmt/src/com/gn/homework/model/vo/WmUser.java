@@ -10,6 +10,9 @@ public class WmUser {
 	private LocalDateTime regDate;
 	
 	public WmUser() {}
+	public WmUser(String userPw) {
+		this.userPw=userPw;
+	}
 	public WmUser(String userId, String userPw) {
 		this.userId = userId;
 		this.userPw = userPw;

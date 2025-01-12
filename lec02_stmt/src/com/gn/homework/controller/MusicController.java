@@ -7,6 +7,20 @@ import com.gn.homework.model.vo.WmSong;
 import com.gn.homework.model.vo.WmUser;
 
 public class MusicController {
+	public int deleteUser(String memId,String memPw) {
+		int result = new MusicDao().deleteUser(memId,memPw);
+		return result;
+	}
+	
+	public int editUser(String memPw,String pass) {
+		int result = new MusicDao().editUser(memPw,pass);
+		return result;
+	}
+	
+	public WmUser selectOneByPw(String memPw) {
+		return new MusicDao().selectOneByPw(memPw);
+		
+	}
 	
 	public int joinMember(String memberId,String memberPw,String memberName) {
 		WmUser u = new WmUser(memberId,memberPw,memberName);

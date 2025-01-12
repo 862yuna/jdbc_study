@@ -33,13 +33,14 @@ public class WaterMelonMusicMenu {
 	}
 	// 회원 가입 메뉴
 	public void joinMember() {
+		sc.nextLine();
 		System.out.println("=== 회원 가입 ===");
 		System.out.print("아이디 : ");
 		String memberId = sc.nextLine();
 		System.out.print("비밀번호 : ");
-		String memberPw = sc.nextLine();
+		String memberPw = sc.next();
 		System.out.print("이름 : ");
-		String memberName = sc.nextLine();
+		String memberName = sc.next();
 
 		int result = mc.joinMember(memberId, memberPw, memberName);
 		
@@ -118,7 +119,7 @@ public class WaterMelonMusicMenu {
 			switch(menu) {
 				case 1 : playMusic(); break;
 				case 2 : editUser(); break;
-//				case 3 : deleteUser(); break;
+				case 3 : deleteUser(); break;
 				case 0 : System.out.println("프로그램이 종료됩니다."); return;
 				default : System.out.println("잘못된 번호입니다."); break;
 			}
@@ -131,7 +132,7 @@ public class WaterMelonMusicMenu {
 		System.out.print("곡 제목 : ");
 		String song = sc.nextLine();
 		System.out.print("아티스트 : ");
-		String artist = sc.next();
+		String artist = sc.nextLine();
 		
 		int result = mc.insertMusic(song,artist);
 		
@@ -184,6 +185,7 @@ public class WaterMelonMusicMenu {
 	
 	// 재생할 음악 번호 입력 -> 재생횟수 증가 (사용자)
 	public void selectPlayMusicByNumber() {
+		sc.nextLine();
 		System.out.println("=== 재생할 음악 번호 입력 ===");
 		System.out.print("번호를 입력해주세요 : ");
 		int songNum = sc.nextInt();
@@ -197,27 +199,50 @@ public class WaterMelonMusicMenu {
 	}
 	// 개인 정보 수정
 	public void editUser() {
+		sc.nextLine();
 		System.out.println("=== 개인 정보 수정 ===");
-		System.out.print("아이디 : ");
-		String memberId = sc.nextLine();
 		System.out.print("비밀번호 : ");
 		String memberPw = sc.next();
-		 WmUser user = mc.selectUserByIdAndPw(memberId, memberPw);
+		 WmUser user = mc.selectOneByPw(memberPw);
 
 		if(user != null) {
+			sc.nextLine();
 			System.out.println("변경할 비밀번호를 입력해주세요");
 			System.out.print("비밀번호 : ");
-			String pass = sc.nextLine();
-//			int result = mc.editUser(pass);
-//			if(result > 0) {
-//				
-//			}
+			String pass = sc.next();
+			int result = mc.editUser(memberPw,pass);
+			if(result > 0) {
+				System.out.println("비밀번호 변경이 완료되었습니다.");
+			}
 		}else {
 			System.out.println("아이디 또는 비밀번호를 확인해주세요.");
 		}
 	}
 	
-	
+	public void deleteUser() {
+		sc.nextLine();
+		System.out.println("=== 회원 탈퇴 ===");
+		System.out.println("비밀번호를 확인해주세요.");
+		System.out.println("=== 개인 정보 수정 ===");
+		System.out.print("비밀번호 : ");
+		String memberPw = sc.next();
+		 WmUser user = mc.selectOneByPw(memberPw);
+		
+		 if(user != null) {
+			 sc.nextLine();
+			 System.out.println("탈퇴할 회원 정보를 입력해주세요.");
+			 System.out.print("아이디 : ");
+			 String memId = sc.next();
+			 System.out.print("비밀번호 : ");
+			 String memPw = sc.next();
+			 int result = mc.deleteUser(memId,memPw);
+			 if(result>0) {
+				 System.out.println("회원 탈퇴가 성공적으로 완료되었습니다.");
+			 }else {
+				 System.out.println("회원 탈퇴에 실패하였습니다.");
+			 }
+		 }
+	}
 	
 	
 	

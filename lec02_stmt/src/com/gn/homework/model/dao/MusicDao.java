@@ -13,6 +13,101 @@ import com.gn.homework.model.vo.WmUser;
 import com.gn.study.model.vo.Member;
 
 public class MusicDao {
+	public int deleteUser(String memId,String memPw) {
+		Connection conn = null;
+		Statement stmt = null;
+		int result = 0;
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			String url = "jdbc:mariadb://127.0.0.1:3306/watermelon_music";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url,id,pw);
+			stmt = conn.createStatement();
+			String sql = "DELETE FROM wm_user "
+					+ "WHERE u_id = '"+memId+"' "
+							+ "AND u_pw = '"+memPw+"'";
+			result = stmt.executeUpdate(sql);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				stmt.close();
+				conn.close();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
+	public WmUser selectOneByPw(String memPw) {
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		WmUser user = null;
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			String url = "jdbc:mariadb://127.0.0.1:3306/watermelon_music";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url,id,pw);
+			stmt = conn.createStatement();
+			String sql = "select * from wm_user where u_pw = '"+memPw+"'";
+			rs = stmt.executeQuery(sql);
+			
+			if(rs.next()) {
+				user= new WmUser();
+				user.setUserNo(rs.getInt("u_no"));
+				user.setUserId(rs.getString("u_id"));
+				user.setUserPw(rs.getString("u_pw"));
+				user.setUserName(rs.getString("u_name"));
+				user.setRegDate(rs.getTimestamp("reg_date").toLocalDateTime());
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				rs.close();
+				stmt.close();
+				conn.close();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return user;
+	}
+	public int editUser(String memPw,String pass) {
+		Connection conn = null;
+		Statement stmt = null;
+		int result = 0;
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			String url = "jdbc:mariadb://127.0.0.1:3306/watermelon_music";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url,id,pw);
+			stmt = conn.createStatement();
+			String sql = "UPDATE wm_user SET u_pw = '"+pass+"' "
+					+ "WHERE u_pw = '"+memPw+"'";
+			result = stmt.executeUpdate(sql);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				stmt.close();
+				conn.close();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
 
 	public int joinMember(WmUser u) {
 		Connection conn = null;
@@ -20,7 +115,7 @@ public class MusicDao {
 		int result = 0;
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
+			String url = "jdbc:mariadb://127.0.0.1:3306/watermelon_music";
 			String id = "scott";
 			String pw = "tiger";
 			conn = DriverManager.getConnection(url,id,pw);
@@ -93,9 +188,8 @@ public class MusicDao {
 			String pw = "tiger";
 			conn = DriverManager.getConnection(url,id,pw);
 			stmt = conn.createStatement();
-			String sql = "INSERT INTO wm_song(m_no ,m_title ,m_artist ,m_play) "
-					+ "VALUES ('"+s.getmNo()+"','"+s.getmTitle()+"'"+ 
-					",'"+s.getmArtist()+",'"+s.getmPlay()+"')";
+			String sql = "INSERT INTO wm_song(m_title ,m_artist) "
+					+ "VALUES('"+s.getmTitle()+"','"+s.getmArtist()+"')";
 			result = stmt.executeUpdate(sql);
 			
 		}catch(Exception e) {
